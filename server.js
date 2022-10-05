@@ -83,6 +83,7 @@ app.use('/auth', require('./routes/auth.js'));
 
 app.use('/main', require('./routes/main.js'));
 
+app.use('/arduino', require('./routes/arduino.js'))
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/build/index.html'))

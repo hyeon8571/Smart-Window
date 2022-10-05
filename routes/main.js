@@ -6,20 +6,32 @@ var router = express.Router();
 
 router.post('/control/data', (req, res) => {
     req.app.db.collection('data-serial').findOne({serialNum : req.body.serialNum}, (에러, 결과) => {
-        
         res.json(
             {
-                temp : 결과.temperature,
-                humid : 결과.humidity,
-                dust : 결과.dust,
-                state : 결과.state,
-                rain : 결과.rain,
-                gas : 결과.gas
+                temp : 결과.temperature, //string
+                humid : 결과.humidity, //string
+                dust : 결과.dust, //string
+                state : 결과.state, //string
+                rain : 결과.rain, //boolean
+                gas : 결과.gas //boolean
             }
         );
         
     })
 })
+
+
+
+
+/*
+const pipeline = [
+    { $match: { 'fullDocument.serialNum' : req.body.serialNum } }
+];
+const changeStream = req.app.db.collection('data-serial').watch(pipeline);
+changeStream.on('change', result => {
+    console.log(result.fullDocument)
+})
+*/
 
 
 router.put('/option-change', (req, res) => {
