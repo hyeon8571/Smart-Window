@@ -19,11 +19,12 @@ var db;
 MongoClient.connect(process.env.DB_URL, { useUnifiedTopology: true }, function(에러, client){  
     if(에러) return console.log(에러)
 
+    var port = process.env.PORT || 3000;
     db = client.db('smartwindow');
 
     app.db = db;
     
-    http.listen(8080, function() {
+    http.listen(port, function() {
         console.log('open server')
     });
 });
