@@ -16,7 +16,7 @@ router.post('/register', (req, res) => {
     }
   })
 
-  req.app.db.collection('user-serial').insertOne({serialNum : req.body.serialNum, ID : req.body.ID}, (에러, 결과) => {
+  req.app.db.collection('user-serial').insertOne({serialNum : req.body.serialNum, ID : req.body.ID, location : req.body.location}, (에러, 결과) => {
     if(에러) {
       res.json(false);
     }
