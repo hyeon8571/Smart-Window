@@ -26,7 +26,17 @@ router.get('/register', (req, res) => {
 })
 
 router.get('/sensing', (req, res) => {
-    req.app.db.collection('data-serial').updateOne({serialNum : req.query.serialNum}, {$set : {temperature : req.query.temp, humidity : req.query.humid, rain : req.query.rain, gas : req.query.gas, state : req.query.state}})
+    req.app.db.collection('data-serial').findOne({serialNum : req.query.serialNum}, (에러, 결과) => {
+        if (결과 != null) {
+            req.app.db.collection('data-serial').updateOne({serialNum : req.query.serialNum}, {$set : {temperature : req.query.temp, humidity : req.query.humid, rain : req.query.rain, gas : req.query.gas, state : req.query.state}}, (에러, 결과) => {
+
+            })
+        } else {
+            req.app.db.collection('data-serial').insertOne({serialNum : req.query.serialNum, temperature : req.query.temp, humidity : req.query.humidity, rain : req.query.rain, gas : req.query.gas, state : req.query.state, dust : "20"}, (에러, 결과) => {
+
+            })
+        }
+    })
 })
 
 
