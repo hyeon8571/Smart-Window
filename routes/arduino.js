@@ -27,9 +27,21 @@ router.get('/register', (req, res) => {
 
 router.get('/sensing', (req, res) => {
     req.app.db.collection('data-serial').findOne({serialNum : req.query.serialNum}, (에러, 결과) => {
-        var updated = {temperature : req.query.temp, humidity : req.query.humid, rain : req.query.rain, gas : req.query.gas, state : req.query.state};
+        var updated = 
+        {  
+            temperature : req.query.temp, 
+            humidity : req.query.humid, 
+            rain : req.query.rain, 
+            gas : req.query.gas, 
+            state : req.query.state
+        };
 
-        var inserted = {serialNum : req.query.serialNum, temperature : req.query.temp, humidity : req.query.humid}
+        var inserted = 
+        {
+            serialNum : req.query.serialNum, 
+            temperature : req.query.temp, 
+            humidity : req.query.humid
+        };
 
         //, rain : req.query.rain, gas : req.query.gas, state : req.query.state, dust : "20"};
 
