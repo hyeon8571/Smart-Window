@@ -59,14 +59,7 @@ router.get('/sensing', (req, res) => {
                         req.app.db.collection('option').findOne({serialNum : req.query.serialNum}, (error, optionResult) => { 
                             if (result.automode == "on") {
                                 res.json('sadsad')
-                               /* res.json(
-                                    {
-                                        autoMode : result.automode,
-                                        manual : "null",
-                                        optionHumid : optionResult.humid,
-                                        optionTemp : optionResult.temp,
-                                    }
-                                )*/
+                               
                             } else {
                                 res.json(
                                     {
