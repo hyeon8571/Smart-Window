@@ -27,48 +27,53 @@ router.get('/register', (req, res) => {
 })
 
 router.get('/sensing', (req, res) => {
-    req.app.db.collection('data-serial').findOne({serialNum : req.query.serialNum}, (에러, 결과) => {
-        var updated = 
-        {  
-            temperature : req.query.temp, 
-            humidity : req.query.humid, 
-            rain : req.query.rain, 
-            gas : req.query.gas, 
-            state : req.query.state
-        };
 
-        var inserted = 
-        {
-            serialNum : req.query.serialNum, 
-            temperature : req.query.temp, 
-            humidity : req.query.humid,
-            rain : req.query.rain,
-            gas : req.query.gas, 
-            state : req.query.state
-        };
+    req.app.db.collection('data-serial').findOne({serialNum : req.query.serialNum}, (err, result) => {
 
-        if (req.query.gas == "true") {
-            req.app.db.collection('log').insertOne({serialNum : req.query.serialNum, Date : new Date()}, (err, result) => {
-                console.log(result);
-            })
-        }
+        if (req.query.temp != result.temperature || req.query.humid != result.humidity || req.query.rain != result.rain || req.query.gas != result.gas || req.query.state != result.state) {
+            var updated = 
+            {  
+                temperature : req.query.temp, 
+                humidity : req.query.humid, 
+                rain : req.query.rain, 
+                gas : req.query.gas, 
+                state : req.query.state
+            };
+    
+            var inserted = 
+            {
+                serialNum : req.query.serialNum, 
+                temperature : req.query.temp, 
+                humidity : req.query.humid,
+                rain : req.query.rain,
+                gas : req.query.gas, 
+                state : req.query.state
+            };
+    
+            if (req.query.gas == "true") {
+                req.app.db.collection('log').insertOne({serialNum : req.query.serialNum, Date : new Date()}, (err, result) => {
+                    console.log(result);
+                })
+            }
 
-        if (결과 != null) {
+            if (result != null) {
                 req.app.db.collection('data-serial').updateOne({serialNum : req.query.serialNum}, {$set : updated}, (에러, 결과) => {
                 
                 })
 
                 req.app.db.collection('mode').findOne({serialNum : req.query.serialNum}, (err, result) => {
                     req.app.db.collection('option').findOne({serialNum : req.query.serialNum}, (error, optionResult) => { 
+  
                         if (result.automode == "on") {
-                                res.json(
+                             res.json(
                                 {
                                     autoMode : result.automode,
                                     manual : "null",
                                     optionHumid : optionResult.humid,
-                                    optionTemp : optionResult.temp,
+                                    optionTemp : optionResult.temp
+                                    
                                 }
-                            )
+                             );
                             } else {
                                 res.json(
                                     {
@@ -79,8 +84,6 @@ router.get('/sensing', (req, res) => {
                             }  
                         })
                     })    
-                
-                
         } else {
             req.app.db.collection('data-serial').insertOne(inserted, (에러, 결과) => {           
                 res.json(
@@ -92,6 +95,8 @@ router.get('/sensing', (req, res) => {
                     }
                 )
             })
+        }
+        
         }
     })
 })
