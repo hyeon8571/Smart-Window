@@ -55,17 +55,20 @@ router.get('/sensing', (req, res) => {
 
         if (결과 != null) {
                 req.app.db.collection('data-serial').updateOne({serialNum : req.query.serialNum}, {$set : updated}, (에러, 결과) => {
-                    req.app.db.collection('mode').findOne({serialNum : req.query.serialNum}, (err, result) => {
-                        req.app.db.collection('option').findOne({serialNum : req.query.serialNum}, (error, optionResult) => { 
-                            if (result.automode == "on") {
-                                 res.json(
-                                    {
-                                        autoMode : result.automode,
-                                        manual : "null",
-                                        optionHumid : optionResult.humid,
-                                        optionTemp : optionResult.temp,
-                                    }
-                                )
+                
+                })
+
+                req.app.db.collection('mode').findOne({serialNum : req.query.serialNum}, (err, result) => {
+                    req.app.db.collection('option').findOne({serialNum : req.query.serialNum}, (error, optionResult) => { 
+                        if (result.automode == "on") {
+                                res.json(
+                                {
+                                    autoMode : result.automode,
+                                    manual : "null",
+                                    optionHumid : optionResult.humid,
+                                    optionTemp : optionResult.temp,
+                                }
+                            )
                             } else {
                                 res.json(
                                     {
@@ -76,7 +79,7 @@ router.get('/sensing', (req, res) => {
                             }  
                         })
                     })    
-                })
+                
                 
         } else {
             req.app.db.collection('data-serial').insertOne(inserted, (에러, 결과) => {           
