@@ -11,26 +11,29 @@ router.get('/register', (req, res) => {
                 } else {
                     res.json({check : "true"});
                 } 
+        }
+        )
+        req.app.db.collection('mode').insertOne({serialNum : req.query.serialNum, automode : 'on'}, (err, result) => {
+        
         })
-        }else {
+        req.app.db.collection('option').insertOne({serialNum : req.query.serialNum, temp : '26', humid : '60', manual : 'null'}, (err, result) => {
+        
+        })
+        } else {
             res.json({check : "true"});
         }
 })
-    req.app.db.collection('mode').insertOne({serialNum : req.query.serialNum, automode : 'on'}, (err, result) => {
-
-    })
+    
 
     // 처음 설치할때 디폴트 기준값
-    req.app.db.collection('option').insertOne({serialNum : req.query.serialNum, temp : '26', humid : '60', manual : 'null'}, (err, result) => {
-        
-    })
+    
 })
 
 router.get('/sensing', (req, res) => {
 
     req.app.db.collection('data-serial').findOne({serialNum : req.query.serialNum}, (err, result) => {
 
-        if (req.query.temp != result.temperature || req.query.humid != result.humidity || req.query.rain != result.rain || req.query.gas != result.gas || req.query.state != result.state) {
+        if ((req.query.temp != result.temperature) || (req.query.humid != result.humidity) || (req.query.rain != result.rain) || (req.query.gas != result.gas) || (req.query.state != result.state)) {
             var updated = 
             {  
                 temperature : req.query.temp, 
