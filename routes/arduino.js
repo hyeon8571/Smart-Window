@@ -24,8 +24,6 @@ router.get('/register', (req, res) => {
         }
 })
     
-
-    // 처음 설치할때 디폴트 기준값
     
 })
 
@@ -103,6 +101,5 @@ router.get('/sensing', (req, res) => {
         }
     })
 })
-
 
 module.exports = router;
