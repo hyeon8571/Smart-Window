@@ -81,14 +81,15 @@ router.get('/sensing', (req, res) => {
                 
         } else {
             req.app.db.collection('data-serial').insertOne(inserted, (에러, 결과) => {
-                res.json(
+                res.json('sadasdsad')
+                /*res.json(
                     {
                         automode : "on",
                         manual : "null",
                         optionHumid : "60",
                         optionTemp : "26"
                     }
-                )
+                )*/
             })
         }
     })
