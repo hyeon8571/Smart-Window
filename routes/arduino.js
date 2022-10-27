@@ -21,7 +21,7 @@ router.get('/register', (req, res) => {
     })
 
     // 처음 설치할때 디폴트 기준값
-    req.app.db.collection('option').insertOne({serialNum : req.query.serialNum, temp : '27', humid : '70', manual : 'null'}, (err, result) => {
+    req.app.db.collection('option').insertOne({serialNum : req.query.serialNum, temp : '26', humid : '60', manual : 'null'}, (err, result) => {
         
     })
 })
@@ -84,8 +84,8 @@ router.get('/sensing', (req, res) => {
                     {
                         automode : "on",
                         manual : "null",
-                        optionHumid : "70",
-                        optionTemp : "27"
+                        optionHumid : "60",
+                        optionTemp : "26"
                     }
                 )
             })
