@@ -121,6 +121,7 @@ router.put('/mode-change', (req, res) => {
 router.put('/state-change',(req,res)=>{
     req.app.db.collection('option').updateOne({serialNum : req.body.serialNum}, {$set : {manual : req.body.state}}, (err, result) => {
         res.json(true);
+        console.log('result');
     })
 })
 
