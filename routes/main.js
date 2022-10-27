@@ -1,42 +1,40 @@
-const e = require('express');
 const express = require('express');
 const { reset } = require('mongodb/lib/core/connection/logger');
 var router = express.Router();
 
 
 
-
+// 앱에 센서가 측정한 데이터들을 보여줌
 router.post('/control/data', (req, res) => {
-    req.app.db.collection('data-serial').findOne({serialNum : req.body.serialNum}, (에러, 결과) => {
+    req.app.db.collection('data-serial').findOne({serialNum : req.body.serialNum}, (err, result) => {
         try {
         res.json(   
             {
-                temp : 결과.temperature, //string
-                humid : 결과.humidity, //string
-                dust : 결과.dust, //string
-                state : 결과.state, //string
-                rain : 결과.rain, //string
-                gas : 결과.gas //string
+                temp : result.temperature, //string
+                humid : result.humidity, //string
+                dust : result.dust, //string
+                state : result.state, //string
+                rain : result.rain, //string
             }
         );   
-        } catch (에러) {
+        } catch (err) {
             res.redirect('/auth/logout')
         }
         
     })
 })
 
-
+// 컨트롤 할 수 있는 창문의 목록을 보여줌
 router.post('/control/data-list', (req, res) => {
-    req.app.db.collection('user-serial').find({ID : req.body.ID}).toArray(function(에러, 결과) {
+    req.app.db.collection('user-serial').find({ID : req.body.ID}).toArray(function(err, result) {
         try {
             
         res.json(
             {
-                serialList : 결과 
+                serialList : result 
             }
         )
-        } catch (에러) {
+        } catch (err) {
             res.redirect('/auth/logout')
         }
         
@@ -44,67 +42,69 @@ router.post('/control/data-list', (req, res) => {
 })
 
 
-//디폴트값은 아두이노에서 보내주고 디비에 저장해야함
+// 현재 적용되어 있는 옵션 값을 보여줌
 router.post('/option-data', (req, res) => {
-    req.app.db.collection('option').findOne({serialNum : req.body.serialNum}, (에러, 결과) => {
+    req.app.db.collection('option').findOne({serialNum : req.body.serialNum}, (err, result) => {
         try {
             res.json(
                 {
-                    temp : 결과.temp,
-                    humid : 결과.humid,
-                    dust : 결과.dust
+                    temp : result.temp,
+                    humid : result.humid,
                 }
             );    
-        } catch (에러) {
+        } catch (err) {
             res.redirect('/auth/logout')
         }
         
     })
 })
 
+// 옵션 변경 기능 
 router.put('/option-change', (req, res) => {
-    req.app.db.collection('option').updateOne({serialNum : req.body.serialNum}, {$set : {temp : req.body.temp, humid : req.body.humid, dust : req.body.dust}}, (에러, 결과) => {
+    req.app.db.collection('option').updateOne({serialNum : req.body.serialNum}, {$set : {temp : req.body.temp, humid : req.body.humid}}, (err, result) => {
         res.json(true);
-        if(에러) {
+        if(err) {
         res.json(false);
         }
     })
 })
 
+// 가스로 인해 창문이 열린 시간을 보여줌
 router.post('/log-data', (req, res) => {
-    req.app.db.collection('log').find({serialNum : req.body.serialNum}).toArray(function(에러, 결과) {
+    req.app.db.collection('log').find({serialNum : req.body.serialNum}).toArray(function(err, result) {
         try {
             res.json(
                 {
-                    data : 결과
+                    data : result
                 }
             );    
-        } catch (error) {
+        } catch (err) {
             res.redirect('/auth/logout');
         }
         
     })
 })
 
-//가스감지시 창문 state가 변하지 않는다면 계속 보내지 않음
+// 로그 지우기 기능
 router.delete('/log-delete', (req,res) => {
     var date = req.body.date + '+00:00'
-    req.app.db.collection('log').deleteOne({serialNum : req.body.serialNum, Date : new Date(date)}, (에러, 결과) => {
+    req.app.db.collection('log').deleteOne({serialNum : req.body.serialNum, Date : new Date(date)}, (err, result) => {
         res.json(true);
     })
     
 })
 
+// 현재 어떤 모드를 사용중인지 보여줌
 router.post('/mode', (req, res) => {
-    req.app.db.collection('mode').findOne({serialNum : req.body.serialNum}, (에러, 결과) => {
+    req.app.db.collection('mode').findOne({serialNum : req.body.serialNum}, (err, result) => {
         try {
          
         res.json(
             {
-                automode : 결과.automode
+                automode : result.automode
             }
         );   
-        } catch (에러) {
+        } catch (err) {
             res.redirect('/auth/logout')
         }
     })
@@ -112,26 +112,28 @@ router.post('/mode', (req, res) => {
 
 //첫 설치시 아두이노에서 정보 쏴줘서 저장해야함
 router.put('/mode-change', (req, res) => {
-    req.app.db.collection('mode').updateOne({serialNum : req.body.serialNum}, {$set : {automode : req.body.automode}}, (에러, 결과) => {
+    req.app.db.collection('mode').updateOne({serialNum : req.body.serialNum}, {$set : {automode : req.body.automode}}, (err, result) => {
         res.json(true);
     })
 })
 
+// 수동모드 일 떄 창문을 열고 닫을 수 있는 기능
 router.put('/state-change',(req,res)=>{
-    req.app.db.collection('data-serial').updateOne({serialNum : req.body.serialNum}, {$set : {state : req.body.state}}, (에러, 결과) => {
+    req.app.db.collection('option').updateOne({serialNum : req.body.serialNum}, {$set : {manual : req.body.state}}, (err, result) => {
         res.json(true);
     })
 })
 
+// 새로운 창문 추가 기능
 router.post('/add-window', (req, res) => {
-    req.app.db.collection('serial').updateOne({serialNum : req.body.serialNum}, {$set : {registration : "Y"}}, (에러, 결과) => {
-        if(에러) {
+    req.app.db.collection('serial').updateOne({serialNum : req.body.serialNum}, {$set : {registration : "Y"}}, (err, result) => {
+        if(err) {
           res.json(false);
         }
       })
     
-      req.app.db.collection('user-serial').insertOne({serialNum : req.body.serialNum, ID : req.body.ID, location : req.body.location}, (에러, 결과) => {
-        if(에러) {
+      req.app.db.collection('user-serial').insertOne({serialNum : req.body.serialNum, ID : req.body.ID, location : req.body.location}, (err, result) => {
+        if(err) {
           res.json(false);
         }
       })
@@ -140,5 +142,3 @@ router.post('/add-window', (req, res) => {
 
 
 module.exports = router;
-
-
