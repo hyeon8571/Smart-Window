@@ -2,19 +2,25 @@ const express = require('express');
 const { reset } = require('mongodb/lib/core/connection/logger');
 var router = express.Router();
 
-
+function loginCheck(req, res, next) {
+    if (req.user) { 
+        next()
+    } else {
+        res.json('!user')
+    }
+}
 
 // 앱에 센서가 측정한 데이터들을 보여줌
-router.post('/control/data', (req, res) => {
+router.post('/control/data', loginCheck, (req, res) => {
     req.app.db.collection('data-serial').findOne({serialNum : req.body.serialNum}, (err, result) => {
         try {
         res.json(   
             {
                 temp : result.temperature, //string
                 humid : result.humidity, //string
-                dust : result.dust, //string
+                gas : result.gas, //string
                 state : result.state, //string
-                rain : result.rain, //string
+                rain : result.rain, //strin
             }
         );   
         } catch (err) {

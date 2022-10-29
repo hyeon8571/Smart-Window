@@ -8,6 +8,8 @@ const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs')
 require('dotenv').config();
 const path = require('path');
+const firebaseAdmin = require('firebase-admin')
+const serviceAccount = require('./fcmtest-3a188-firebase-adminsdk-x385i-f6546d024e.json')
 
 const http = require('http').createServer(app);
 const { Server } = require("socket.io");
