@@ -88,7 +88,7 @@ router.post('/get-token', (req, res) => {
 
 
 setInterval(() => {
-  console.log(fcmToken);
+  //console.log(fcmToken);
   if(fcmToken != '') {
     var message = {
       notification:{
