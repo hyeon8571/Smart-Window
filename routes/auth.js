@@ -4,13 +4,6 @@ var router = express.Router();
 const passport = require('passport'); 
 
 
-const firebaseAdmin = require('firebase-admin')
-const serviceAccount = require('../fcmtest-3a188-firebase-adminsdk-x385i-f6546d024e.json')
-
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount)
-})
-
 // 회원가입
 router.post('/register', (req, res) => {
   req.app.db.collection('user').insertOne({ID : req.body.ID, Password : req.body.Password, Token : "null"}, (err, result) => {
@@ -85,28 +78,6 @@ router.post('/get-token', (req, res) => {
     fcmToken = req.body.token;
   })
 })
-
-
-setInterval(() => {
-  //console.log(fcmToken);
-  if(fcmToken != '') {
-    var message = {
-      notification:{
-          title: '가스',
-          body:"doit"
-      }
-      ,token:fcmToken
-    }
-    firebaseAdmin.messaging().send(message)
-    .then((response)=>{
-      console.log('메시지 전송 성공 : ',response)
-    })
-    .catch((e)=>{
-      console.error('message error : ',e)
-    })
-  }
-    
-}, 10000);
 
 
 router.get('/fail', (req, res) => {

@@ -1,14 +1,6 @@
 const express = require('express');
 var router = express.Router();
 
-const firebaseAdmin = require('firebase-admin')
-const serviceAccount = require('../fcmtest-3a188-firebase-adminsdk-x385i-f6546d024e.json')
-
-// firebase 연동
-firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(serviceAccount)
-})
-
 
 router.get('/register', (req, res) => {
     req.app.db.collection('serial').findOne({ serialNum: req.query.serialNum }, (err, result) => {  //꺼졌다 켜졌을때 대비
@@ -62,26 +54,6 @@ router.get('/sensing', (req, res) => {
         if (req.query.gas == "true") {
             req.app.db.collection('log').insertOne({ serialNum: req.query.serialNum, Date: new Date() }, (err, result) => {
                 console.log(result);
-            })
-
-            req.app.db.collection('user-serial').findOne({ serialNum: req.query.serialNum }, (err, result) => {
-                req.app.db.collection('user').findOne({ ID: result.ID }, (에러, 결과) => {
-
-                    var message = {
-                        notification: {
-                            title: '경고!!',
-                            body: "현재 집안에 가스가 감지되었습니다."
-                        }
-                        , token: 결과.Token
-                    }
-                    firebaseAdmin.messaging().send(message)
-                        .then((response) => {
-                            console.log('메시지 전송 성공 : ', response)
-                        })
-                        .catch((e) => {
-                            console.error('message error : ', e)
-                        })
-                })
             })
         }
 
