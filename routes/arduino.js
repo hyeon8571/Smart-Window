@@ -1,14 +1,14 @@
 const express = require('express');
 var router = express.Router();
-/*
+
 const firebaseAdmin = require('firebase-admin')
 const serviceAccount = require('../fcmtest-3a188-firebase-adminsdk-x385i-f6546d024e.json')
 
-// firebase 연결
+// firebase 연동
 firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(serviceAccount)
 })
-*/
+
 
 router.get('/register', (req, res) => {
     req.app.db.collection('serial').findOne({ serialNum: req.query.serialNum }, (err, result) => {  //꺼졌다 켜졌을때 대비
