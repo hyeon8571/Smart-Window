@@ -1,7 +1,7 @@
 const express = require('express');
 var router = express.Router();
 
-
+// 초기 아두이노 셋팅
 router.get('/register', (req, res) => {
     req.app.db.collection('serial').findOne({ serialNum: req.query.serialNum }, (err, result) => {  //꺼졌다 켜졌을때 대비
         if (result == null) {
@@ -27,6 +27,7 @@ router.get('/register', (req, res) => {
 
 })
 
+// 아두이노 데이터 송수신
 router.get('/sensing', (req, res) => {
 
     // register로 등록할 때 먼저 삽입
