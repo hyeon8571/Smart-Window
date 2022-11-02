@@ -74,11 +74,6 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build/index.html'))
-})
-    
-
 app.use('/auth', require('./routes/auth.js'));
 
 app.use('/main', require('./routes/main.js'));
