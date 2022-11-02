@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 app.use(express.urlencoded({extended: true}));
 app.use(bodyParser.json());
 const MongoClient = require('mongodb').MongoClient;
-app.set('view engine', 'ejs')
 require('dotenv').config();
 const path = require('path');
 
