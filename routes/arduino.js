@@ -80,7 +80,7 @@ router.get('/sensing', (req, res) => {
                             res.json(
                                 {
                                     autoMode: result.automode,
-                                    manual: optionResult.manual, // 이 값에 따라 아두이노는 창문을 열거나 닫아야 함
+                                    manual: optionResult.manual, 
                                     optionHumid: "null",
                                     optionTemp: "null"
                                 }
@@ -106,7 +106,7 @@ router.get('/sensing', (req, res) => {
                             res.json(
                                 {
                                     autoMode: result.automode,
-                                    manual: optionResult.manual // 이 값에 따라 아두이노는 창문을 열거나 닫아야 함
+                                    manual: optionResult.manual 
 
                                 }
                             )
@@ -130,3 +130,5 @@ router.get('/sensing', (req, res) => {
 })
 
 module.exports = router;
+
+var a;

@@ -82,3 +82,5 @@ app.use('/arduino', require('./routes/arduino.js'))
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/build/index.html'))
 })
+
+var a;

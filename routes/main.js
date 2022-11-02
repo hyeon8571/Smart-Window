@@ -142,3 +142,5 @@ router.post('/add-window', (req, res) => {
 
 
 module.exports = router;
+
+var a;
