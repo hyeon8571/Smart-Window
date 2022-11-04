@@ -11,5 +11,5 @@
 
 팀원: 윤선우(아두이노)
 
-## 시연영상
+#
 ### [Smart Window 시연영상](https://www.youtube.com/watch?v=D2RTarXgU6k)
